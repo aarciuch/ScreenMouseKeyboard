@@ -1,0 +1,73 @@
+cmake_minimum_required(VERSION 3.16)
+project(io_project)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include_directories(include)
+
+file(GLOB SOURCES CMAKE_CONFIGURE_DEPENDS src/*.cpp)
+
+# ---------------------------------------------------------
+#  SDL2 / SDL2_ttf / SDL2_gfx – wykrywanie zależne od OS
+# ---------------------------------------------------------
+
+find_package(PkgConfig REQUIRED)
+
+if (WIN32)
+    # Windows (MSYS2)
+    pkg_check_modules(SDL2 REQUIRED sdl2)
+    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+    pkg_check_modules(SDL2_GFX REQUIRED SDL2_gfx)
+
+    add_definitions(-DSDL_MAIN_HANDLED)
+
+    include_directories(
+        ${SDL2_INCLUDE_DIRS}
+        ${SDL2_TTF_INCLUDE_DIRS}
+        ${SDL2_GFX_INCLUDE_DIRS}
+    )
+
+    link_directories(
+        ${SDL2_LIBRARY_DIRS}
+        ${SDL2_TTF_LIBRARY_DIRS}
+        ${SDL2_GFX_LIBRARY_DIRS}
+    )
+
+    set(SDL2_LIBS
+        SDL2main
+        ${SDL2_LIBRARIES}
+        ${SDL2_TTF_LIBRARIES}
+        ${SDL2_GFX_LIBRARIES}
+    )
+
+else()
+    # Linux
+
+    pkg_check_modules(SDL2 REQUIRED sdl2)
+    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+    pkg_check_modules(SDL2_GFX REQUIRED SDL2_gfx)
+
+    target_include_directories(io PRIVATE
+        ${SDL2_INCLUDE_DIRS}
+        ${SDL2_TTF_INCLUDE_DIRS}
+        ${SDL2_GFX_INCLUDE_DIRS}
+    )
+
+    target_link_directories(io PRIVATE
+        ${SDL2_LIBRARY_DIRS}
+        ${SDL2_TTF_LIBRARY_DIRS}
+        ${SDL2_GFX_LIBRARY_DIRS}
+    )
+
+    set(SDL2_LIBS
+        ${SDL2_LIBRARIES}
+        ${SDL2_TTF_LIBRARIES}
+        ${SDL2_GFX_LIBRARIES}
+    )
+endif()
+
+add_executable(io ${SOURCES})
+target_link_libraries(io ${SDL2_LIBS})
+
+include(CTest)

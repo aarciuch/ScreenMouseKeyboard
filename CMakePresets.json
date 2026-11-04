@@ -1,0 +1,52 @@
+{
+  "version": 3,
+
+  "configurePresets": [
+    {
+      "name": "mingw64-debug",
+      "displayName": "MinGW64 Debug",
+      "generator": "MinGW Makefiles",
+      "binaryDir": "build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "C:/msys64/mingw64/bin/gcc.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/g++.exe"
+      }
+    },
+
+    {
+      "name": "linux-debug",
+      "displayName": "Linux Debug",
+      "generator": "Unix Makefiles",
+      "binaryDir": "build-linux-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+
+    {
+      "name": "linux-release",
+      "displayName": "Linux Release",
+      "generator": "Unix Makefiles",
+      "binaryDir": "build-linux-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+
+  "buildPresets": [
+    {
+      "name": "mingw64-debug",
+      "configurePreset": "mingw64-debug"
+    },
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release"
+    }
+  ]
+}
